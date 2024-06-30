@@ -16,7 +16,7 @@ BERT 的概念很简单，但实验效果很强大。它刷新了 11 个 NLP 任
 
 我们认为，当前的技术严重地限制了预训练表示的效果，特别是对于微调方法。主要的局限性是标准语言模型是单向的，这就限制了可以在预训练期间可以使用的模型结构的选择。例如，在 OpenAI GPT 中，作者使用了从左到右的模型结构，其中每个标记只能关注 Transformer 的自注意层中该标记前面的标记（[Williams et al., 2018](https://arxiv.org/abs/1704.05426v4)）。这些限制对于句子级别的任务来说是次优的（还可以接受），但当把基于微调的方法用来处理标记级别的任务（如 SQuAD 问答）时可能会造成不良的影响（[Rajpurkar et al., 2016](https://arxiv.org/abs/1606.05250v3)），因为在标记级别的任务下，从两个方向分析上下文是至关重要的。
 
-在本文中，我们通过提出 BERT 改进了基于微调的方法：来自 Transformer 的双向编码器表示。受完形填空任务的启发，BERT 通过提出一个新的预训练任务来解决前面提到的单向约束：“遮蔽语言模型”（MLM masked language model）（[Tay-lor, 1953](https://www.researchgate.net/publication/232539913_Cloze_Procedure_A_New_Tool_For_Measuring_Readability)）。遮蔽语言模型从输入中随机遮蔽一些标记，目的是仅根据被遮蔽标记的上下文来预测它对应的原始词汇的 id。与从左到右的语言模型预训练不同，MLM 目标允许表示融合左右上下文，这允许我们预训练一个深层双向 Transformer。除了遮蔽语言模型之外，我们还提出了一个联合预训练文本对来进行“下一个句子预测”的任务。
+在本文中，我们通过提出 BERT 改进了基于微调的方法：来自 Transformer 的双向编码器表示。受完形填空任务的启发，BERT 通过提出一个新的预训练任务来解决前面提到的单向约束：“遮蔽语言模型”（MLM masked language model）（[Taylor, 1953](https://www.researchgate.net/publication/232539913_Cloze_Procedure_A_New_Tool_For_Measuring_Readability)）。遮蔽语言模型从输入中随机遮蔽一些标记，目的是仅根据被遮蔽标记的上下文来预测它对应的原始词汇的 id。与从左到右的语言模型预训练不同，MLM 目标允许表示融合左右上下文，这允许我们预训练一个深层双向 Transformer。除了遮蔽语言模型之外，我们还提出了一个联合预训练文本对来进行“下一个句子预测”的任务。
 
 本文的贡献如下：
 + 我们论证了双向预训练对语言表征的重要性。与 [Radford et al., 2018](https://blog.openai.com/language-unsupervised/) 使用单向语言模型进行预训练不同，BERT 使用遮蔽语言模型来实现预训练深层双向表示。这也与 [Peters et al., 2018](https://arxiv.org/abs/1802.05365v2) 的研究形成了对比，他们使用了一个由左到右和由右到左的独立训练语言模型的浅层连接。
